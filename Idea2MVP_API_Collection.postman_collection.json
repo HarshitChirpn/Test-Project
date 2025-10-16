@@ -1,0 +1,2184 @@
+{
+  "info": {
+    "name": "Idea2MVP API Collection",
+    "description": "Complete API collection for Idea2MVP platform including authentication, user management, services, projects, and more.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://backend-or1e.onrender.com",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.token) {",
+                  "        pm.collectionVariables.set('authToken', response.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"Test User\",\n  \"displayName\": \"Test User\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.token) {",
+                  "        pm.collectionVariables.set('authToken', response.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh-token"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"displayName\": \"Updated Display Name\",\n  \"bio\": \"Updated bio information\",\n  \"linkedin\": \"https://linkedin.com/in/updated\",\n  \"website\": \"https://updated-website.com\",\n  \"emailNotifications\": true,\n  \"marketingEmails\": false,\n  \"projectUpdates\": true,\n  \"securityAlerts\": true,\n  \"darkMode\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "change-password"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users (Admin)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Users Last Updated",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/last-updated",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "last-updated"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated User Name\",\n  \"email\": \"updated@example.com\",\n  \"displayName\": \"Updated Display Name\",\n  \"role\": \"admin\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Blogs",
+      "item": [
+        {
+          "name": "Get All Blogs",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blogs"]
+            }
+          }
+        },
+        {
+          "name": "Get Blog by ID",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blogs", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "BLOG_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Increment Blog View Count",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/:id/view",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blogs", ":id", "view"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "BLOG_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Blog (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Blog Post\",\n  \"content\": \"This is the full content of the blog post. It should be at least 100 characters long to meet the validation requirements.\",\n  \"excerpt\": \"Short excerpt of the blog post\",\n  \"author\": \"Author Name\",\n  \"category\": \"Web App\",\n  \"slug\": \"new-blog-post\",\n  \"image\": \"https://example.com/image.jpg\",\n  \"tags\": [\"web\", \"development\", \"tutorial\"],\n  \"published\": true,\n  \"featured\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blogs"]
+            }
+          }
+        },
+        {
+          "name": "Update Blog (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Blog Post\",\n  \"content\": \"This is the updated content of the blog post. It should be at least 100 characters long to meet the validation requirements.\",\n  \"excerpt\": \"Updated excerpt of the blog post\",\n  \"author\": \"Updated Author Name\",\n  \"category\": \"Mobile App\",\n  \"slug\": \"updated-blog-post\",\n  \"image\": \"https://example.com/updated-image.jpg\",\n  \"tags\": [\"mobile\", \"development\", \"tutorial\"],\n  \"published\": true,\n  \"featured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blogs", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "BLOG_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Blog (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blogs", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "BLOG_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Portfolio",
+      "item": [
+        {
+          "name": "Get All Portfolio",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio"]
+            }
+          }
+        },
+        {
+          "name": "Get Portfolio by ID",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PORTFOLIO_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Portfolio by Slug",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/slug/:slug",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", "slug", ":slug"],
+              "variable": [
+                {
+                  "key": "slug",
+                  "value": "portfolio-slug"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Portfolio (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Portfolio Project\",\n  \"category\": \"Web App\",\n  \"description\": \"This is a detailed description of the portfolio project. It should be at least 50 characters long to meet validation requirements.\",\n  \"image\": \"https://example.com/project-image.jpg\",\n  \"client\": \"Client Name\",\n  \"timeline\": \"3 months\",\n  \"teamSize\": \"5 developers\",\n  \"technologies\": [\"React\", \"Node.js\", \"MongoDB\"],\n  \"published\": true,\n  \"featured\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio"]
+            }
+          }
+        },
+        {
+          "name": "Update Portfolio (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Portfolio Project\",\n  \"category\": \"Mobile App\",\n  \"description\": \"This is an updated detailed description of the portfolio project. It should be at least 50 characters long to meet validation requirements.\",\n  \"image\": \"https://example.com/updated-project-image.jpg\",\n  \"client\": \"Updated Client Name\",\n  \"timeline\": \"4 months\",\n  \"teamSize\": \"6 developers\",\n  \"technologies\": [\"React Native\", \"Firebase\", \"Redux\"],\n  \"published\": true,\n  \"featured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PORTFOLIO_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Portfolio (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PORTFOLIO_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "Get All Services",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "services"]
+            }
+          }
+        },
+        {
+          "name": "Get Service by ID",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/services/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "services", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "SERVICE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Service (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Web Development Service\",\n  \"description\": \"Complete web development service including frontend, backend, and database design. This description is detailed enough to meet validation requirements.\",\n  \"icon\": \"web-icon\",\n  \"category\": \"Development\",\n  \"order\": 1,\n  \"isActive\": true,\n  \"serviceDetails\": {\n    \"title\": \"Web Development Package\",\n    \"leftSection\": {\n      \"title\": \"Core Services\",\n      \"services\": [\n        {\n          \"icon\": \"frontend-icon\",\n          \"title\": \"Frontend Development\",\n          \"description\": \"React/Vue.js frontend development\",\n          \"price\": \"$2000\",\n          \"amount\": \"2000\",\n          \"paymentLink\": \"https://payment.example.com/frontend\"\n        }\n      ]\n    },\n    \"rightSection\": {\n      \"services\": [\n        {\n          \"icon\": \"backend-icon\",\n          \"title\": \"Backend Development\",\n          \"description\": \"Node.js/Python backend development\",\n          \"price\": \"$3000\",\n          \"amount\": \"3000\",\n          \"paymentLink\": \"https://payment.example.com/backend\"\n        }\n      ]\n    },\n    \"features\": [\"Responsive Design\", \"SEO Optimized\", \"Fast Loading\"],\n    \"pricing\": \"Starting from $2000\",\n    \"duration\": \"4-6 weeks\",\n    \"deliverables\": [\"Source Code\", \"Documentation\", \"Deployment\"],\n    \"technologies\": [\"React\", \"Node.js\", \"MongoDB\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "services"]
+            }
+          }
+        },
+        {
+          "name": "Update Service (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Web Development Service\",\n  \"description\": \"Updated complete web development service including frontend, backend, and database design. This description is detailed enough to meet validation requirements.\",\n  \"icon\": \"updated-web-icon\",\n  \"category\": \"Development\",\n  \"order\": 1,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/services/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "services", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "SERVICE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Service (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/services/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "services", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "SERVICE_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Purchases",
+      "item": [
+        {
+          "name": "Get All Purchases (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/purchases",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchases"]
+            }
+          }
+        },
+        {
+          "name": "Get Purchase by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/purchases/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchases", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PURCHASE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Purchases",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/purchases/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchases", "user", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Purchase (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"USER_ID_HERE\",\n  \"serviceId\": \"SERVICE_ID_HERE\",\n  \"amount\": 2000,\n  \"status\": \"completed\",\n  \"paymentMethod\": \"credit_card\",\n  \"transactionId\": \"txn_123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/purchases",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchases"]
+            }
+          }
+        },
+        {
+          "name": "Update Purchase (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"paymentMethod\": \"credit_card\",\n  \"transactionId\": \"txn_updated_123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/purchases/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchases", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PURCHASE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Purchase (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/purchases/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchases", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PURCHASE_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Onboarding",
+      "item": [
+        {
+          "name": "Get All Onboarding (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/onboarding",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "onboarding"]
+            }
+          }
+        },
+        {
+          "name": "Get User Onboarding",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/onboarding/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "onboarding", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User Onboarding",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"USER_ID_HERE\",\n  \"step\": 1,\n  \"completed\": false,\n  \"data\": {\n    \"companyName\": \"Example Company\",\n    \"industry\": \"Technology\",\n    \"teamSize\": \"10-50\",\n    \"goals\": [\"Increase efficiency\", \"Improve user experience\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/onboarding",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "onboarding"]
+            }
+          }
+        },
+        {
+          "name": "Update User Onboarding",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"step\": 2,\n  \"completed\": true,\n  \"data\": {\n    \"companyName\": \"Updated Company Name\",\n    \"industry\": \"Technology\",\n    \"teamSize\": \"50-100\",\n    \"goals\": [\"Increase efficiency\", \"Improve user experience\", \"Scale operations\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/onboarding/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "onboarding", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User Onboarding",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/onboarding/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "onboarding", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "Get All User Progress (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress"]
+            }
+          }
+        },
+        {
+          "name": "Get User Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/progress/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"USER_ID_HERE\",\n  \"currentPhase\": \"planning\",\n  \"currentSubstep\": 1,\n  \"completedPhases\": [],\n  \"milestones\": [],\n  \"overallProgress\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress"]
+            }
+          }
+        },
+        {
+          "name": "Update User Progress",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPhase\": \"development\",\n  \"currentSubstep\": 3,\n  \"completedPhases\": [\"planning\"],\n  \"overallProgress\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/progress/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Current Phase Substep",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phase\": \"development\",\n  \"substep\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/progress/:userId/phase-substep",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress", ":userId", "phase-substep"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Milestone",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"milestoneId\": \"MILESTONE_ID_HERE\",\n  \"status\": \"completed\",\n  \"notes\": \"Milestone completed successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/progress/:userId/milestone",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress", ":userId", "milestone"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User Progress",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/progress/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "progress", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "item": [
+        {
+          "name": "Create Contact Submission",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"subject\": \"Inquiry about web development services\",\n  \"message\": \"I am interested in your web development services and would like to discuss a potential project.\",\n  \"type\": \"sales\",\n  \"selectedService\": \"Web Development\",\n  \"services\": [\"Web Development\", \"Mobile App Development\"],\n  \"source\": \"website\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/submissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "submissions"]
+            }
+          }
+        },
+        {
+          "name": "Get Contact Info",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/contact-info",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "contact-info"]
+            }
+          }
+        },
+        {
+          "name": "Get User Service Consumption",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/consumption/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "consumption", "user", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Services by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/consumption/category/:category",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "consumption", "category", ":category"],
+              "variable": [
+                {
+                  "key": "category",
+                  "value": "Development"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Contact Submissions (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/submissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "submissions"]
+            }
+          }
+        },
+        {
+          "name": "Get Contact Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/submissions/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "submissions", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Contact Submission by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/submissions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "submissions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "SUBMISSION_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Contact Submission (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"responded\",\n  \"notes\": \"Contacted client and scheduled meeting\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/submissions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "submissions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "SUBMISSION_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Contact Submission (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/submissions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "submissions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "SUBMISSION_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Admin Contact Info (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/admin/contact-info",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "admin", "contact-info"]
+            }
+          }
+        },
+        {
+          "name": "Update Contact Info (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contact@example.com\",\n  \"phone\": \"+1-555-123-4567\",\n  \"address\": \"123 Main St, City, State 12345\",\n  \"socialMedia\": {\n    \"linkedin\": \"https://linkedin.com/company/example\",\n    \"twitter\": \"https://twitter.com/example\",\n    \"facebook\": \"https://facebook.com/example\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/contact/admin/contact-info",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contact", "admin", "contact-info"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Get All Projects (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects"]
+            }
+          }
+        },
+        {
+          "name": "Get User Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "user", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Project Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/user/:userId/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "user", ":userId", "stats"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Project by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Project\",\n  \"description\": \"This is a detailed description of the new project. It should be at least 10 characters long to meet validation requirements.\",\n  \"type\": \"Web Application\",\n  \"category\": \"E-commerce\",\n  \"priority\": \"high\",\n  \"startDate\": \"2024-01-01\",\n  \"targetDate\": \"2024-06-01\",\n  \"budget\": 50000,\n  \"currency\": \"USD\",\n  \"tags\": [\"web\", \"ecommerce\", \"react\"],\n  \"technologies\": [\"React\", \"Node.js\", \"MongoDB\"],\n  \"services\": [\"Web Development\", \"UI/UX Design\"],\n  \"settings\": {\n    \"notifications\": {\n      \"email\": true,\n      \"push\": false,\n      \"milestoneUpdates\": true,\n      \"teamUpdates\": true\n    },\n    \"visibility\": \"private\",\n    \"allowTeamInvites\": true,\n    \"autoArchive\": false\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects"]
+            }
+          }
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Project Name\",\n  \"description\": \"This is an updated detailed description of the project. It should be at least 10 characters long to meet validation requirements.\",\n  \"type\": \"Mobile Application\",\n  \"category\": \"Social Media\",\n  \"priority\": \"medium\",\n  \"budget\": 75000,\n  \"tags\": [\"mobile\", \"social\", \"react-native\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Milestone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Project Kickoff\",\n  \"description\": \"Initial project setup and team introduction\",\n  \"dueDate\": \"2024-01-15\",\n  \"priority\": \"high\",\n  \"assignedTo\": \"USER_ID_HERE\",\n  \"tags\": [\"setup\", \"kickoff\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/:id/milestones",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", ":id", "milestones"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Milestone",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Project Kickoff\",\n  \"description\": \"Updated initial project setup and team introduction\",\n  \"dueDate\": \"2024-01-20\",\n  \"priority\": \"medium\",\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/:id/milestones/:milestoneId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", ":id", "milestones", ":milestoneId"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PROJECT_ID_HERE"
+                },
+                {
+                  "key": "milestoneId",
+                  "value": "MILESTONE_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Get Cart Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "summary"]
+            }
+          }
+        },
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceId\": \"SERVICE_ID_HERE\",\n  \"title\": \"Web Development Service\",\n  \"description\": \"Complete web development service\",\n  \"amount\": \"2000\",\n  \"icon\": \"web-icon\",\n  \"category\": \"Development\",\n  \"serviceType\": \"individual\",\n  \"price\": 2000,\n  \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "Update Item Quantity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/:serviceId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", ":serviceId"],
+              "variable": [
+                {
+                  "key": "serviceId",
+                  "value": "SERVICE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Remove from Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/:serviceId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", ":serviceId"],
+              "variable": [
+                {
+                  "key": "serviceId",
+                  "value": "SERVICE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/clear",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "clear"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Avatar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/upload/avatar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload", "avatar"]
+            }
+          }
+        },
+        {
+          "name": "Delete Avatar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/upload/avatar/:filename",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload", "avatar", ":filename"],
+              "variable": [
+                {
+                  "key": "filename",
+                  "value": "avatar-filename.jpg"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Project Workflow",
+      "item": [
+        {
+          "name": "Get All Projects (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow"]
+            }
+          }
+        },
+        {
+          "name": "Get Project Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get User Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", "user", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Project",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Workflow Project\",\n  \"description\": \"This is a detailed description of the new workflow project.\",\n  \"type\": \"Web Application\",\n  \"category\": \"E-commerce\",\n  \"priority\": \"high\",\n  \"startDate\": \"2024-01-01\",\n  \"targetDate\": \"2024-06-01\",\n  \"budget\": 50000,\n  \"currency\": \"USD\",\n  \"tags\": [\"web\", \"ecommerce\", \"react\"],\n  \"technologies\": [\"React\", \"Node.js\", \"MongoDB\"],\n  \"services\": [\"Web Development\", \"UI/UX Design\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow"]
+            }
+          }
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Workflow Project\",\n  \"description\": \"This is an updated detailed description of the workflow project.\",\n  \"type\": \"Mobile Application\",\n  \"category\": \"Social Media\",\n  \"priority\": \"medium\",\n  \"budget\": 75000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Project Phase",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phase\": \"development\",\n  \"notes\": \"Moving to development phase\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/phase",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "phase"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Toggle Project Substep",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phase\": \"development\",\n  \"substep\": 2,\n  \"completed\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/substeps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "substeps"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Milestone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Project Kickoff\",\n  \"description\": \"Initial project setup and team introduction\",\n  \"dueDate\": \"2024-01-15\",\n  \"priority\": \"high\",\n  \"assignedTo\": \"USER_ID_HERE\",\n  \"tags\": [\"setup\", \"kickoff\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/milestones",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "milestones"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Milestone",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Project Kickoff\",\n  \"description\": \"Updated initial project setup and team introduction\",\n  \"dueDate\": \"2024-01-20\",\n  \"priority\": \"medium\",\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/milestones/:milestoneId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "milestones", ":milestoneId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                },
+                {
+                  "key": "milestoneId",
+                  "value": "MILESTONE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Milestone",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/milestones/:milestoneId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "milestones", ":milestoneId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                },
+                {
+                  "key": "milestoneId",
+                  "value": "MILESTONE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Deliverable",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Project Documentation\",\n  \"description\": \"Complete project documentation and user manual\",\n  \"type\": \"documentation\",\n  \"dueDate\": \"2024-02-01\",\n  \"assignedTo\": \"USER_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/deliverables",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "deliverables"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Communication",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"meeting\",\n  \"subject\": \"Weekly Project Update\",\n  \"message\": \"Weekly project status update meeting\",\n  \"scheduledDate\": \"2024-01-15T10:00:00Z\",\n  \"participants\": [\"USER_ID_HERE\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/project-workflow/:projectId/communications",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "project-workflow", ":projectId", "communications"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "PROJECT_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Service Consumption",
+      "item": [
+        {
+          "name": "Get All Service Consumption (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption"]
+            }
+          }
+        },
+        {
+          "name": "Get Service Consumption Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Service Consumption by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "CONSUMPTION_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Service Consumption",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption/user/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption", "user", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Service Consumption (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"USER_ID_HERE\",\n  \"serviceId\": \"SERVICE_ID_HERE\",\n  \"consumedAt\": \"2024-01-01T00:00:00Z\",\n  \"status\": \"active\",\n  \"notes\": \"Service consumption created\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption"]
+            }
+          }
+        },
+        {
+          "name": "Update Service Consumption (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"notes\": \"Service consumption completed successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "CONSUMPTION_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Service Consumption (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/service-consumption/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "service-consumption", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "CONSUMPTION_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Testimonials",
+      "item": [
+        {
+          "name": "Get Featured Testimonials",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials/featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials", "featured"]
+            }
+          }
+        },
+        {
+          "name": "Get All Testimonials (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials"]
+            }
+          }
+        },
+        {
+          "name": "Get Testimonial Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Testimonial by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TESTIMONIAL_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Testimonial (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"company\": \"Example Company\",\n  \"position\": \"CEO\",\n  \"content\": \"Excellent service and great results. Highly recommended!\",\n  \"rating\": 5,\n  \"image\": \"https://example.com/john-doe.jpg\",\n  \"featured\": true,\n  \"published\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials"]
+            }
+          }
+        },
+        {
+          "name": "Update Testimonial (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"company\": \"Updated Company\",\n  \"position\": \"CTO\",\n  \"content\": \"Updated excellent service and great results. Highly recommended!\",\n  \"rating\": 5,\n  \"image\": \"https://example.com/updated-john-doe.jpg\",\n  \"featured\": true,\n  \"published\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TESTIMONIAL_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Testimonial (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/testimonials/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "testimonials", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TESTIMONIAL_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
